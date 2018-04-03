@@ -122,11 +122,19 @@ def slider_wrapper(event):
 
 def reset(event):
     # reset button
+    needs_run = False
     if any((slide_mu.val != slide_mu.valinit, 
             slide_sigma.val != slide_sigma.valinit)):
-        slide_mu.reset()
-        slide_sigma.reset()
+        needs_run = True
+    slide_mu.reset()
+    slide_sigma.reset()
+    for cb in [i for i, x in enumerate(chk_conn.get_status()) if x]:
+        chk_conn.set_active(cb)
+    if needs_run:
         run_model(event)
+
+        
+
 
     fig.canvas.draw_idle()
 

@@ -21,14 +21,19 @@ muMin = -muMax
 
 sigmaInit = 1
 sigma = sigmaInit
-sigmaMax = 5
+sigmaMax = 2
 sigmaMin = 0
 
-yView = 25
+yView = 50
 
 
 # DEFINE FUNCTIONS
 def generate_elevation(themu, thesigma):
+    '''
+    make the elevation record, start of the model run
+
+    requires a mean and std dev for normal distribution to work
+    '''
     nt = len(t)
     elev = np.zeros(nt)
     elev[0] = 0
@@ -41,6 +46,11 @@ def generate_elevation(themu, thesigma):
 
 
 def generate_stratigraphy(elev):
+    '''
+    make the final stratigraphy by applying the stratigraphic filter
+
+    loop from end to beginning of time to check if elevation was ever lower
+    '''
     nt = len(t)
     strat = np.zeros(nt)
     strat[-1] = elev[-1]
@@ -51,25 +61,38 @@ def generate_stratigraphy(elev):
 
 
 def compute_statistics(elev, strat):
+    '''
+    function to compute statistics of the model run
+
+    add more stats by appending to end of list and adding to table setup
+    '''
     stats = []
     stats.append( elev[-1] )
     stats.append( (sum( elev == strat )-1) / T )
+
     return stats
 
 
 def run_model(event):
-    # read values from the sliders
+    '''
+    the core model run method
+        - can be triggered by multiple events or event wrappers
+    '''
+    
+    # read values from the sliders/statics
     themu = slide_mu.val
     thesigma = slide_sigma.val
     T = time
     dt = timestep
 
+    # compute one run
     t = np.linspace(0, T, T+1/dt)
     elev = generate_elevation(themu, thesigma)
     strat = generate_stratigraphy(elev)
     stats = compute_statistics(elev, strat)
     summ_stats = np.tile(np.nan, (len(stats), 1))
 
+    # if summary stats is checked, compute more runs
     if chk_conn.get_status()[0]:
         nRun = 100
         summ_stats = stats
@@ -79,6 +102,7 @@ def run_model(event):
             istats = compute_statistics(ielev, istrat)        
             summ_stats = (summ_stats*(i-1) + istats) / i
 
+            # update the plot and the table
     zero_line.set_ydata(np.zeros(len(t)))
     elev_line.set_data(t, elev)
     strat_line.set_data(t, strat)
@@ -86,23 +110,23 @@ def run_model(event):
         statsTable._cells[(tab_row, 0)]._text.set_text(utils.format_table_number(stats[tab_row-1]))
         statsTable._cells[(tab_row, 1)]._text.set_text(utils.format_table_number(summ_stats[tab_row-1]))
 
-    # if np.abs(themu*T) > yView:
-    #     ax.set_ylim([-np.abs(themu)*T*1.5, themu*T*1.5])
-    # else:
-    #     ax.set_ylim([-yView, yView])
-
     # redraw the canvas
     fig.canvas.draw_idle()
 
 
 def slider_wrapper(event):
+    # this is a wrapper for the sliders to only run model if connected
     if chk_conn.get_status()[1]:
         run_model(event)
 
 
 def reset(event):
-    slide_mu.reset()
-    slide_sigma.reset()
+    # reset button
+    if any((slide_mu.val != slide_mu.valinit, 
+            slide_sigma.val != slide_sigma.valinit)):
+        slide_mu.reset()
+        slide_sigma.reset()
+        run_model(event)
 
     fig.canvas.draw_idle()
 
@@ -111,7 +135,7 @@ def reset(event):
 elev = generate_elevation(muInit, sigmaInit)
 strat = generate_stratigraphy(elev)
 stats = compute_statistics(elev, strat)
-summ_stats = np.tile(np.nan, (len(stats), 1))
+summ_stats = np.tile(np.nan, (len(stats), 1)) # fill nans for init
 
 
 # setup the figure
@@ -128,7 +152,7 @@ plt.ylim(-yView, yView)
 
 # add plot elements
 zero_line, = plt.step(t, np.zeros(len(t)), linestyle=":", lw=1.5, color='black')
-strat_line, = plt.step(t, strat, lw=2, color='red') # plot preserved
+strat_line, = plt.step(t, strat, lw=2, color='red')
 elev_line, = plt.step(t, elev, lw=1.5, color='grey')
 
 

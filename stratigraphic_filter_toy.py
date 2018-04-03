@@ -49,6 +49,11 @@ def generate_stratigraphy(elev):
 
     return strat
 
+def compute_statistics(elev, strat):
+    stats = {}
+    stats['end_elev'] = elev[-1]
+    stats['time_pres'] = (sum( elev == strat )-1) / T
+    return stats
 
 def run_model(event):
     # read values from the sliders
@@ -60,6 +65,8 @@ def run_model(event):
     t = np.linspace(0, T, T+1/dt)
     elev = generate_elevation(themu, thesigma)
     strat = generate_stratigraphy(elev)
+    stats = compute_statistics(elev, strat)
+    print(stats)
 
     zero_line.set_ydata(np.zeros(len(t)))
     elev_line.set_data(t, elev)
@@ -125,10 +132,10 @@ btn_run_ax = plt.axes([0.7, 0.35, 0.2, 0.15])
 btn_run = widget.Button(btn_run_ax, 'Run', color='lightskyblue', hovercolor='0.975')
 
 chk_conn_ax = plt.axes([0.7, 0.15, 0.25, 0.15], facecolor=background_color)
-chk_conn_dict = {'connect sliders to run':'wl'}
+chk_conn_dict = {'connect sliders to run':'aa', 'show statistics': 'bb'}
 chk_conn = widget.CheckButtons(chk_conn_ax, 
                                chk_conn_dict,
-                               [False])
+                               [False, False])
 
 btn_reset_ax = plt.axes([0.7, 0.075, 0.1, 0.04])
 btn_reset = widget.Button(btn_reset_ax, 'Reset', color=widget_color, hovercolor='0.975')

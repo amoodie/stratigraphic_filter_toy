@@ -3,29 +3,6 @@ import numpy as np
 from matplotlib.widgets import AxesWidget
 import six
 
-def format_number(number):
-    integer = int(round(number, -1))
-    string = "{:,}".format(integer)
-    return(string)
-
-def format_table_number(number):
-    integer = (round(number, 1))
-    string = str(integer)
-    return(string)
-
-def format_polyvects(x1, x2, y1, y2):
-    x = np.hstack((x1, np.flipud(x2)))
-    y = np.hstack((y1, np.flipud(y2)))
-    xy = np.column_stack((x, y))
-    return xy
-
-def format_table_color(value):
-    if value:
-        color = 'green'
-    else:
-        color= 'red'
-    return color
-
 class MinMaxSlider(AxesWidget):
     """
     A slider representing a floating point range.

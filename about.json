@@ -8,7 +8,7 @@
     "difficulty": 5,
     "preview": ["private", "demo.png"],
     "exec": ["src", "stratigraphic_filter_toy.py"],
-    "docloc": ["docs"],
+    "docloc": ["doc"],
     "doclist": {
     	"theory.md": "Theory behind the stratigraphic filter and the model"
     }

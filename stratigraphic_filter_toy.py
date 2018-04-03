@@ -78,7 +78,6 @@ def run_model(event):
     the core model run method
         - can be triggered by multiple events or event wrappers
     '''
-    
     # read values from the sliders/statics
     themu = slide_mu.val
     thesigma = slide_sigma.val
@@ -132,9 +131,6 @@ def reset(event):
         chk_conn.set_active(cb)
     if needs_run:
         run_model(event)
-
-        
-
 
     fig.canvas.draw_idle()
 

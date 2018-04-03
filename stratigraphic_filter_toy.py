@@ -8,7 +8,7 @@ import matplotlib.widgets as widget
 import utils
 
 # SET PARAMETERS
-time = 20
+time = 50
 T = time
 timestep = 1
 dt = timestep
@@ -51,9 +51,6 @@ def generate_stratigraphy(elev):
 
 
 def compute_statistics(elev, strat):
-    # stats = {}
-    # stats['end_elev'] = elev[-1]
-    # stats['time_pres'] = (sum( elev == strat )-1) / T
     stats = []
     stats.append( elev[-1] )
     stats.append( (sum( elev == strat )-1) / T )
@@ -74,7 +71,7 @@ def run_model(event):
     summ_stats = np.tile(np.nan, (len(stats), 1))
 
     if chk_conn.get_status()[0]:
-        nRun = 1000
+        nRun = 100
         summ_stats = stats
         for i in np.arange(1, nRun+1):
             ielev = generate_elevation(themu, thesigma)
@@ -149,13 +146,13 @@ slide_sigma = utils.MinMaxSlider(ax_sigma, 'std. dev. of change', sigmaMin, sigm
 
 # add table
 statsNames = ['Final elevation', 'Frac. time preserved']
-columnNames = ['this run', 'of 1000 runs']
+columnNames = ['this run', 'of 100 runs']
 ax_statsTable = plt.axes([0.6, 0.325, 0.5, 0.1], frameon=False, xticks=[], yticks=[])
 tabData = np.tile(['0', '0'], (len(columnNames), 1))
 statsTable = plt.table(cellText=tabData, rowLabels=statsNames,
                        colLabels=columnNames, colWidths=[0.2, 0.2],
                        loc="center")
-statsTable.scale(1, 1.5) # xscale, yscale 
+statsTable.scale(1, 1.5) # xscale, yscale of cells
 for tab_row in np.arange(1, np.size(tabData,0)+1):
     statsTable._cells[(tab_row, 0)]._text.set_text(utils.format_table_number(stats[tab_row-1]))
     statsTable._cells[(tab_row, 1)]._text.set_text(utils.format_table_number(summ_stats[tab_row-1]))
@@ -163,8 +160,8 @@ for tab_row in np.arange(1, np.size(tabData,0)+1):
 
 # add gui buttons
 chk_conn_ax = plt.axes([0.55, 0.5, 0.2, 0.15], facecolor=background_color)
-chk_conn_list = ['compute 1000 run statistics', 'connect sliders to run']
-chk_conn = widget.CheckButtons(chk_conn_ax, 
+chk_conn_list = ['compute 100-run statistics', 'connect sliders to run']
+chk_conn = widget.CheckButtons(chk_conn_ax,
                                chk_conn_list,
                                [False, False])
 

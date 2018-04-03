@@ -3,6 +3,14 @@ import numpy as np
 from matplotlib.widgets import AxesWidget
 import six
 
+def format_table_number(number):
+    if not np.isnan(number):
+        integer = (round(number, 2))
+        string = str(integer)
+    else:
+        string = 'NaN'        
+    return(string)
+
 class MinMaxSlider(AxesWidget):
     """
     A slider representing a floating point range.

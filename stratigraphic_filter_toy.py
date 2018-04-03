@@ -159,16 +159,16 @@ for tab_row in np.arange(1, np.size(tabData,0)+1):
 
 
 # add gui buttons
-chk_conn_ax = plt.axes([0.55, 0.5, 0.2, 0.15], facecolor=background_color)
+chk_conn_ax = plt.axes([0.55, 0.5, 0.25, 0.15], facecolor=background_color)
 chk_conn_list = ['compute 100-run statistics', 'connect sliders to run']
 chk_conn = widget.CheckButtons(chk_conn_ax,
                                chk_conn_list,
                                [False, False])
 
-btn_run_ax = plt.axes([0.775, 0.575, 0.175, 0.075])
+btn_run_ax = plt.axes([0.825, 0.575, 0.125, 0.075])
 btn_run = widget.Button(btn_run_ax, 'Run', color='lightskyblue', hovercolor='0.975')
 
-btn_reset_ax = plt.axes([0.775, 0.5, 0.1, 0.04])
+btn_reset_ax = plt.axes([0.825, 0.5, 0.1, 0.04])
 btn_reset = widget.Button(btn_reset_ax, 'Reset', color=widget_color, hovercolor='0.975')
 
 

@@ -17,7 +17,7 @@ Visit the section of the text below for more information on installing and execu
 This module depends on Python3, and the libraries `numpy` and `matplotlib`. 
 
 #### Anaconda installation
-It is recommended that you install Anaconda, which is an open source distribution of Python. It comes with many basic scientific libraries, some of which are used in the module. Anaconda can be dowloaded at https://www.anaconda.com/download/ for Windows, macOS, and Linux. Please follow the instruction provided in the website as to how to install and setup Python on your computer.
+It is recommended that you install Anaconda, which is an open source distribution of Python. It comes with many basic scientific libraries, some of which are used in the module. Anaconda can be downloaded at https://www.anaconda.com/download/ for Windows, macOS, and Linux. Please follow the instruction provided in the website as to how to install and setup Python on your computer.
 
 #### Custom Python installation
 If you want a more flexible and lightweight Python distribution, you can use whatever your favorite package manager is distributing (e.g., `homebrew` or `apt`), check the [Windows downloads here](https://www.python.org/downloads/windows/), or compile [from source](https://www.python.org/downloads/source/).

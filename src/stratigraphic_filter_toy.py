@@ -60,16 +60,27 @@ def generate_stratigraphy(elev):
     return strat
 
 
+def compute_bedthickness(strat):
+    diff = strat[1:] - strat[:-1]
+    thicks = diff[np.nonzero(diff)]
+    meanthick = np.mean(np.array(thicks))
+    # return things as named tuple
+    # calc section thickness, and number of beds too
+    # fix bug for when diff is all zeros (nothing is preserved) and then mean(NaN) is error
+    return meanthick
+
+
 def compute_statistics(elev, strat):
     '''
     function to compute statistics of the model run
 
     add more stats by appending to end of list and adding to table setup
+    this really needs to be rewritten to use a dictionary
     '''
     stats = []
-    stats.append( elev[-1] )
-    stats.append( (sum( elev == strat )-1) / T )
-
+    stats.append( elev[-1] )                            # final elevation
+    stats.append( (sum( elev == strat )-1) / T )        # fraction of time preserved
+    stats.append( compute_bedthickness(strat) )         # thickness of beds preserved
     return stats
 
 
@@ -101,7 +112,7 @@ def run_model(event):
             istats = compute_statistics(ielev, istrat)        
             summ_stats = (summ_stats*(i-1) + istats) / i
 
-            # update the plot and the table
+    # update the plot and the table
     zero_line.set_ydata(np.zeros(len(t)))
     elev_line.set_data(t, elev)
     strat_line.set_data(t, strat)
@@ -173,10 +184,10 @@ slide_sigma = utils.MinMaxSlider(ax_sigma, 'std. dev. of change', sigmaMin, sigm
 
 
 # add table
-statsNames = ['Final elevation', 'Frac. time preserved']
+statsNames = ['Final elevation', 'Frac. time preserved', 'mean bed thickness']
 columnNames = ['this run', 'of 100 runs']
 ax_statsTable = plt.axes([0.6, 0.325, 0.5, 0.1], frameon=False, xticks=[], yticks=[])
-tabData = np.tile(['0', '0'], (len(columnNames), 1))
+tabData = np.tile(['0', '0'], (len(statsNames), 1))
 statsTable = plt.table(cellText=tabData, rowLabels=statsNames,
                        colLabels=columnNames, colWidths=[0.2, 0.2],
                        loc="center")

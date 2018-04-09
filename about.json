@@ -3,7 +3,7 @@
     "author": "Andrew J. Moodie",
     "shortdesc": "Explore the erosional filter on the stratigraphic record",
     "version": "0.5",
-    "projurl": "[https://github.com/amoodie/stratigraphic_filter_toy]([https://github.com/amoodie/stratigraphic_filter_toy])",
+    "projurl": "[hosted on GitHub]([https://github.com/amoodie/stratigraphic_filter_toy])",
     "projreadme": ["README.md"],
     "difficulty": 5,
     "preview": ["private", "demo.png"],

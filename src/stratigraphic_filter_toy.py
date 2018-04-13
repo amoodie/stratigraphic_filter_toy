@@ -61,12 +61,16 @@ def generate_stratigraphy(elev):
 
 
 def compute_bedthickness(strat):
+    '''
+    compute the thicknesses of beds preserved in the stratigraphy
+    '''
     diff = strat[1:] - strat[:-1]
     thicks = diff[np.nonzero(diff)]
-    meanthick = np.mean(np.array(thicks))
-    # return things as named tuple
-    # calc section thickness, and number of beds too
-    # fix bug for when diff is all zeros (nothing is preserved) and then mean(NaN) is error
+    if len(thicks) > 0:
+        meanthick = np.mean(np.array(thicks))
+    else:
+        meanthick = 0
+
     return meanthick
 
 
@@ -101,6 +105,7 @@ def run_model(event):
     strat = generate_stratigraphy(elev)
     stats = compute_statistics(elev, strat)
     summ_stats = np.tile(np.nan, (len(stats), 1))
+    print(summ_stats)
 
     # if summary stats is checked, compute more runs
     if chk_conn.get_status()[0]:
@@ -109,7 +114,8 @@ def run_model(event):
         for i in np.arange(1, nRun+1):
             ielev = generate_elevation(themu, thesigma)
             istrat = generate_stratigraphy(ielev)
-            istats = compute_statistics(ielev, istrat)        
+            istats = compute_statistics(ielev, istrat) 
+            print(istats[-1])       
             summ_stats = (summ_stats*(i-1) + istats) / i
 
     # update the plot and the table

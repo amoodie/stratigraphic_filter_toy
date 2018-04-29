@@ -5,6 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.widgets as widget
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import utils
 
 # SET PARAMETERS
@@ -24,7 +25,7 @@ sigma = sigmaInit
 sigmaMax = 2
 sigmaMin = 0
 
-yView = 50
+yView = 30
 
 
 # DEFINE FUNCTIONS
@@ -88,6 +89,22 @@ def compute_statistics(elev, strat):
     return stats
 
 
+def make_column(strat):
+    '''
+    calculate the column to plot on the right
+    as bed contacts, and plot it
+    '''
+    diff = strat[1:] - strat[:-1]
+    bedelevs = strat[np.nonzero(diff)]
+    
+    ax_strat.clear()
+    if len(bedelevs) <= 1:
+        bedelev = strat.min()
+        ax_strat.axhline(linewidth=1, color='k', y=bedelev)
+    else:
+        for b in bedelevs:
+            ax_strat.axhline(linewidth=1, color='k', y=b)
+
 def run_model(event):
     '''
     the core model run method
@@ -105,7 +122,6 @@ def run_model(event):
     strat = generate_stratigraphy(elev)
     stats = compute_statistics(elev, strat)
     summ_stats = np.tile(np.nan, (len(stats), 1))
-    # print(summ_stats)
 
     # if summary stats is checked, compute more runs
     if chk_conn.get_status()[0]:
@@ -121,11 +137,17 @@ def run_model(event):
     zero_line.set_ydata(np.zeros(len(t)))
     elev_line.set_data(t, elev)
     strat_line.set_data(t, strat)
+    make_column(strat)
     for tab_row in np.arange(1, np.size(tabData,0)+1):
         statsTable._cells[(tab_row, 0)]._text.set_text(utils.format_table_number(stats[tab_row-1]))
         statsTable._cells[(tab_row, 1)]._text.set_text(utils.format_table_number(summ_stats[tab_row-1]))
 
     # redraw the canvas
+    new_yView = np.absolute(elev).max() * 1.2
+    if new_yView > yView:
+        ax_filter.set_ylim(-new_yView, new_yView)
+    else:
+        ax_filter.set_ylim(-yView, yView)
     fig.canvas.draw_idle()
 
 
@@ -161,31 +183,38 @@ summ_stats = np.tile(np.nan, (len(stats), 1)) # fill nans for init
 # setup the figure
 plt.rcParams['toolbar'] = 'None'
 plt.rcParams['figure.figsize'] = 11, 7
-fig, ax = plt.subplots()
-fig.canvas.set_window_title('SedEdu -- stratigraphic filter toy')
-plt.subplots_adjust(left=0.075, bottom=0.1, top=0.95, right=0.5)
+fig, ax_filter = plt.subplots()
+fig.canvas.set_window_title('SedEdu -- The Stratigraphic Filter')
+plt.subplots_adjust(left=0.075, bottom=0.1, top=0.95, right=0.525)
 background_color = 'white'
-ax.set_xlabel("time")
-ax.set_ylabel("elevation")
+ax_filter.set_xlabel("time")
+ax_filter.set_ylabel("elevation")
 plt.ylim(-yView, yView)
 
 
+# add second axes for strat column
+divider = make_axes_locatable(ax_filter)
+ax_strat = divider.append_axes("right", 0.5, pad=0.1, sharey=ax_filter)
+ax_strat.yaxis.tick_right()
+
+
 # add plot elements
-zero_line, = plt.step(t, np.zeros(len(t)), linestyle=":", lw=1.5, color='black')
-strat_line, = plt.step(t, strat, lw=2, color='red')
-elev_line, = plt.step(t, elev, lw=1.5, color='grey')
+zero_line, = ax_filter.step(t, np.zeros(len(t)), linestyle=":", lw=1.5, color='black')
+strat_line, = ax_filter.step(t, strat, lw=2, color='red')
+elev_line, = ax_filter.step(t, elev, lw=1.5, color='grey')
+make_column(strat)
 
 
 # add slider
 widget_color = 'lightgoldenrodyellow'
 
-ax_mu = plt.axes([0.55, 0.85, 0.4, 0.05], facecolor=widget_color)
+ax_mu = plt.axes([0.625, 0.85, 0.3, 0.05], facecolor=widget_color)
 slide_mu = utils.MinMaxSlider(ax_mu, 'mean of elevation change', muMin, muMax, 
-    valinit=muInit, valstep=0.05, valfmt='%g', transform=ax.transAxes)
+    valinit=muInit, valstep=0.05, valfmt='%g', transform=ax_filter.transAxes)
 
-ax_sigma = plt.axes([0.55, 0.725, 0.4, 0.05], facecolor=widget_color)
+ax_sigma = plt.axes([0.625, 0.725, 0.3, 0.05], facecolor=widget_color)
 slide_sigma = utils.MinMaxSlider(ax_sigma, 'std. dev. of change', sigmaMin, sigmaMax, 
-    valinit=sigmaInit, valstep=0.1, transform=ax.transAxes)
+    valinit=sigmaInit, valstep=0.1, transform=ax_filter.transAxes)
 
 
 # add table
@@ -203,16 +232,16 @@ for tab_row in np.arange(1, np.size(tabData,0)+1):
 
 
 # add gui buttons
-chk_conn_ax = plt.axes([0.55, 0.5, 0.25, 0.15], facecolor=background_color)
-chk_conn_list = ['compute 100-run statistics', 'connect sliders to run']
+chk_conn_ax = plt.axes([0.59, 0.5, 0.175, 0.15], facecolor=background_color)
+chk_conn_list = ['100-run statistics', 'run w/ slider']
 chk_conn = widget.CheckButtons(chk_conn_ax,
                                chk_conn_list,
                                [False, False])
 
-btn_run_ax = plt.axes([0.825, 0.575, 0.125, 0.075])
+btn_run_ax = plt.axes([0.82, 0.575, 0.125, 0.075])
 btn_run = widget.Button(btn_run_ax, 'Run', color='lightskyblue', hovercolor='0.975')
 
-btn_reset_ax = plt.axes([0.825, 0.5, 0.1, 0.04])
+btn_reset_ax = plt.axes([0.82, 0.5, 0.1, 0.04])
 btn_reset = widget.Button(btn_reset_ax, 'Reset', color=widget_color, hovercolor='0.975')
 
 

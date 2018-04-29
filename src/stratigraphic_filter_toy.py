@@ -105,7 +105,7 @@ def run_model(event):
     strat = generate_stratigraphy(elev)
     stats = compute_statistics(elev, strat)
     summ_stats = np.tile(np.nan, (len(stats), 1))
-    print(summ_stats)
+    # print(summ_stats)
 
     # if summary stats is checked, compute more runs
     if chk_conn.get_status()[0]:
@@ -115,7 +115,6 @@ def run_model(event):
             ielev = generate_elevation(themu, thesigma)
             istrat = generate_stratigraphy(ielev)
             istats = compute_statistics(ielev, istrat) 
-            print(istats[-1])       
             summ_stats = (summ_stats*(i-1) + istats) / i
 
     # update the plot and the table

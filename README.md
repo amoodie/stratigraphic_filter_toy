@@ -28,7 +28,7 @@ Whatever method you choose, you will need to install the dependencies. installat
 ### Download the source code
 
 #### grab the zip
-You can download this entire repository as a `.zip` by clicking the "Clone or download button on this page", or by [clicking here](https://github.com/amoodie/flooding_in_deltas/archive/master.zip) to get a `.zip` folder. Unzip the folder in your preferred location.
+You can download this entire repository as a `.zip` by clicking the "Clone or download button on this page", or by [clicking here](https://github.com/amoodie/stratigraphic_filter_toy/archive/master.zip) to get a `.zip` folder. Unzip the folder in your preferred location.
 
 #### git 
 If you have installed `git` and are comfortable working with it, you can simply clone the repository to your preferred location.

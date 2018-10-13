@@ -4,8 +4,8 @@ This explores the erosional stratigraphic filter on stratigraphy with a simple o
 
 This repository is also linked into the [SedEdu suite of education modules](https://github.com/sededu/sededu), and can be accessed there as well.
 
-![demo image](./private/demo.png "demo of the module")<!-- .element height="50%" width="50%" -->
 
+<img src="https://github.com/sededu/stratigraphic_filter/blob/master/private/demo.png" alt="demo_png" width="500">
 
 
 ## Installation and running the module

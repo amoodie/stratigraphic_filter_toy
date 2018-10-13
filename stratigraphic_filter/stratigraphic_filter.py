@@ -6,7 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.widgets as widget
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import utils
+
+if __name__ == '__main__':
+    import utils    
+else:
+    from . import utils
 
 # SET PARAMETERS
 time = 50
@@ -104,6 +108,7 @@ def make_column(strat):
     else:
         for b in bedelevs:
             ax_strat.axhline(linewidth=1, color='k', y=b)
+
 
 def run_model(event):
     '''

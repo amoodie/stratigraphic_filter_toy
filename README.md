@@ -25,7 +25,11 @@ If you want a more flexible and lightweight Python distribution, you can use wha
 Whatever method you choose, you will need to install the dependencies. installation by `pip` is easiest, and probably supported if you used anything but compiling from source.
 
 
-### Download the source code
+### Download the module
+
+#### install with pip
+
+```pip install git+https://github.com/sededu/stratigraphic_filter.git```
 
 #### grab the zip
 You can download this entire repository as a `.zip` by clicking the "Clone or download button on this page", or by [clicking here](https://github.com/sededu/stratigraphic_filter_toy/archive/master.zip) to get a `.zip` folder. Unzip the folder in your preferred location.

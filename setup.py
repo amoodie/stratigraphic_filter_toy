@@ -28,10 +28,6 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     python_requires='>=3',
-    install_requires=[
-        'scipy',
-        'numpy',
-        'matplotlib'],
     include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',

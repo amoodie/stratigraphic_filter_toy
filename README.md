@@ -2,7 +2,7 @@
 
 This explores the erosional stratigraphic filter on stratigraphy with a simple one-dimensional model of surface elevation over time.
 
-This repository is also linked into the [SedEdu suite of education modules](https://github.com/amoodie/sededu), and can be accessed there as well.
+This repository is also linked into the [SedEdu suite of education modules](https://github.com/sededu/sededu), and can be accessed there as well.
 
 ![demo image](./private/demo.png "demo of the module")<!-- .element height="50%" width="50%" -->
 
@@ -28,13 +28,13 @@ Whatever method you choose, you will need to install the dependencies. installat
 ### Download the source code
 
 #### grab the zip
-You can download this entire repository as a `.zip` by clicking the "Clone or download button on this page", or by [clicking here](https://github.com/amoodie/stratigraphic_filter_toy/archive/master.zip) to get a `.zip` folder. Unzip the folder in your preferred location.
+You can download this entire repository as a `.zip` by clicking the "Clone or download button on this page", or by [clicking here](https://github.com/sededu/stratigraphic_filter_toy/archive/master.zip) to get a `.zip` folder. Unzip the folder in your preferred location.
 
 #### git 
 If you have installed `git` and are comfortable working with it, you can simply clone the repository to your preferred location.
 
 ```
-https://github.com/amoodie/stratigraphic_filter_toy.git
+https://github.com/sededu/stratigraphic_filter_toy.git
 ```
 
 

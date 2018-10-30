@@ -5,8 +5,13 @@ import sys, os
 sys.path.append(os.path.realpath(os.path.dirname(__file__)+"/.."))
 
 import numpy as np
-# import matplotlib
+import matplotlib
 # import stratigraphic_filter.stratigraphic_filter
+
+
+T = 50
+dt = 1
+t = np.array(np.linspace(0, T, T+1/dt))
 
 
 def test_pass():
@@ -15,11 +20,12 @@ def test_pass():
 
 
 # def test_generate_elevation():
-#     from stratigraphic_filter.stratigraphic_filter import generate_elevation
+#     from stratigraphic_filter.functions import generate_elevation
+
 #     mu = 0
 #     sigma = 1
 #     elev = generate_elevation(mu, sigma)
-#     print(elev)
+#     assert True
 
 
 # @pytest.mark.mpl_image_compare(baseline_dir='figs_baseline')

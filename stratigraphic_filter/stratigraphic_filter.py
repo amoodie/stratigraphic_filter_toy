@@ -8,9 +8,11 @@ import matplotlib.widgets as widget
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 if __name__ == '__main__':
-    import utils    
+    import utils
+    import functions as funcs
 else:
     from . import utils
+    from . import functions as funcs
 
 # SET PARAMETERS
 time = 50
@@ -31,66 +33,6 @@ sigmaMin = 0
 
 yView = 30
 
-
-# DEFINE FUNCTIONS
-def generate_elevation(themu, thesigma):
-    '''
-    make the elevation record, start of the model run
-
-    requires a mean and std dev for normal distribution to work
-    '''
-    nt = len(t)
-    elev = np.zeros(nt)
-    elev[0] = 0
-    for j in np.arange(1,nt):
-        jt = t[j]
-        jump = np.random.normal(themu, thesigma, 1)
-        elev[j] = elev[j-1] + jump
-
-    return elev
-
-
-def generate_stratigraphy(elev):
-    '''
-    make the final stratigraphy by applying the stratigraphic filter
-
-    loop from end to beginning of time to check if elevation was ever lower
-    '''
-    nt = len(t)
-    strat = np.zeros(nt)
-    strat[-1] = elev[-1]
-    for j in np.flipud(np.arange(0, nt-1)):
-        strat[j] = np.array([elev[j], strat[j+1]]).min()
-
-    return strat
-
-
-def compute_bedthickness(strat):
-    '''
-    compute the thicknesses of beds preserved in the stratigraphy
-    '''
-    diff = strat[1:] - strat[:-1]
-    thicks = diff[np.nonzero(diff)]
-    if len(thicks) > 0:
-        meanthick = np.mean(np.array(thicks))
-    else:
-        meanthick = 0
-
-    return meanthick
-
-
-def compute_statistics(elev, strat):
-    '''
-    function to compute statistics of the model run
-
-    add more stats by appending to end of list and adding to table setup
-    this really needs to be rewritten to use a dictionary
-    '''
-    stats = []
-    stats.append( elev[-1] )                            # final elevation
-    stats.append( (sum( elev == strat )-1) / T )        # fraction of time preserved
-    stats.append( compute_bedthickness(strat) )         # thickness of beds preserved
-    return stats
 
 
 def make_column(strat):
@@ -123,9 +65,9 @@ def run_model(event):
 
     # compute one run
     t = np.linspace(0, T, T+1/dt)
-    elev = generate_elevation(themu, thesigma)
-    strat = generate_stratigraphy(elev)
-    stats = compute_statistics(elev, strat)
+    elev = funcs.generate_elevation(t, themu, thesigma)
+    strat = funcs.generate_stratigraphy(t, elev)
+    stats = funcs.compute_statistics(T, elev, strat)
     summ_stats = np.tile(np.nan, (len(stats), 1))
 
     # if summary stats is checked, compute more runs
@@ -133,9 +75,9 @@ def run_model(event):
         nRun = 100
         summ_stats = stats
         for i in np.arange(1, nRun+1):
-            ielev = generate_elevation(themu, thesigma)
-            istrat = generate_stratigraphy(ielev)
-            istats = compute_statistics(ielev, istrat) 
+            ielev = funcs.generate_elevation(t, themu, thesigma)
+            istrat = funcs.generate_stratigraphy(t, ielev)
+            istats = funcs.compute_statistics(T, ielev, istrat) 
             summ_stats = (summ_stats*(i-1) + istats) / i
 
     # update the plot and the table
@@ -179,9 +121,9 @@ def reset(event):
 
 
 # run the program once with the initial values
-elev = generate_elevation(muInit, sigmaInit)
-strat = generate_stratigraphy(elev)
-stats = compute_statistics(elev, strat)
+elev = funcs.generate_elevation(t, muInit, sigmaInit)
+strat = funcs.generate_stratigraphy(t, elev)
+stats = funcs.compute_statistics(T, elev, strat)
 summ_stats = np.tile(np.nan, (len(stats), 1)) # fill nans for init
 
 
@@ -257,5 +199,6 @@ btn_reset.on_clicked(reset)
 btn_run.on_clicked(run_model)
 
 
-# show the results
-plt.show()
+if __name__ == '__main__':
+    # show the results
+    plt.show()

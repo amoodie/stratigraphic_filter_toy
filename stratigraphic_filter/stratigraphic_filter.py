@@ -18,8 +18,8 @@ else:
 time = 50
 T = time
 timestep = 1
-dt = timestep
-t = np.array(np.linspace(0, T, T+1/dt))
+dt = int(timestep)
+t = np.linspace(0, T, T+1//dt)
 
 muInit = 0
 mu = muInit
@@ -64,7 +64,7 @@ def run_model(event):
     dt = timestep
 
     # compute one run
-    t = np.linspace(0, T, T+1/dt)
+    t = np.linspace(0, T, T+1//dt)
     elev = funcs.generate_elevation(t, themu, thesigma)
     strat = funcs.generate_stratigraphy(t, elev)
     stats = funcs.compute_statistics(T, elev, strat)
@@ -143,6 +143,7 @@ plt.ylim(-yView, yView)
 divider = make_axes_locatable(ax_filter)
 ax_strat = divider.append_axes("right", 0.5, pad=0.1, sharey=ax_filter)
 ax_strat.yaxis.tick_right()
+ax_strat.xaxis.set_visible(False)
 
 
 # add plot elements
@@ -165,7 +166,7 @@ slide_sigma = utils.MinMaxSlider(ax_sigma, 'std. dev. of change', sigmaMin, sigm
 
 
 # add table
-statsNames = ['Final elevation', 'Frac. time preserved', 'mean bed thickness']
+statsNames = ['Final elevation', 'Frac. time preserved', 'Mean bed thickness']
 columnNames = ['this run', 'of 100 runs']
 ax_statsTable = plt.axes([0.6, 0.325, 0.5, 0.1], frameon=False, xticks=[], yticks=[])
 tabData = np.tile(['0', '0'], (len(statsNames), 1))
@@ -183,7 +184,7 @@ chk_conn_ax = plt.axes([0.59, 0.5, 0.175, 0.15], facecolor=background_color)
 chk_conn_list = ['100-run statistics', 'run w/ slider']
 chk_conn = widget.CheckButtons(chk_conn_ax,
                                chk_conn_list,
-                               [False, False])
+                               [False, True])
 
 btn_run_ax = plt.axes([0.82, 0.575, 0.125, 0.075])
 btn_run = widget.Button(btn_run_ax, 'Run', color='lightskyblue', hovercolor='0.975')

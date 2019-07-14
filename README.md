@@ -1,6 +1,6 @@
 # The Stratigraphic Filter
 
-This explores the erosional stratigraphic filter on stratigraphy with a simple one-dimensional model of surface elevation over time.
+This module explores the erosional stratigraphic filter on stratigraphy with a simple one-dimensional model of surface elevation over time.
 
 This repository is also linked into the [SedEdu suite of education modules](https://github.com/sededu/sededu), and can be accessed there as well.
 
@@ -54,7 +54,7 @@ python3 <path-to-the-repo-folder>/src/stratigraphic_filter_toy.py
 
 Worksheets are being written to accompany the GUI module. The aim of the worksheets is to help guide a discussion about flooding on deltas or rivers, as may be discussed in Earth Science courses. The modules currently available are targeted at specific age groups:
 
-* none
+* theory behind the model
 
 **Educators:** please let me know if you used this module, and if there are any ways you can see for us to help facilitate this sort of module in the future. Your feedback is very much appreciated. Email to Andrew Moodie, amoodie@rice.edu.
 

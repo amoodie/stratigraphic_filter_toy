@@ -114,3 +114,4 @@ venv.bak/
 
 # svg files in private
 /private/*.svg
+/doc/figures/*

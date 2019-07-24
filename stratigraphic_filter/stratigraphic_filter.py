@@ -72,7 +72,7 @@ def run_model(event):
 
     # if summary stats is checked, compute more runs
     if chk_conn.get_status()[0]:
-        nRun = 100
+        nRun = 500
         summ_stats = stats
         for i in np.arange(1, nRun+1):
             ielev = funcs.generate_elevation(t, themu, thesigma)
@@ -157,17 +157,17 @@ make_column(strat)
 widget_color = 'lightgoldenrodyellow'
 
 ax_mu = plt.axes([0.625, 0.85, 0.3, 0.05], facecolor=widget_color)
-slide_mu = utils.MinMaxSlider(ax_mu, 'mean of elevation change', muMin, muMax, 
+slide_mu = utils.MinMaxSlider(ax_mu, 'mean of elevation change ($\mu$)', muMin, muMax, 
     valinit=muInit, valstep=0.05, valfmt='%g', transform=ax_filter.transAxes)
 
 ax_sigma = plt.axes([0.625, 0.725, 0.3, 0.05], facecolor=widget_color)
-slide_sigma = utils.MinMaxSlider(ax_sigma, 'std. dev. of change', sigmaMin, sigmaMax, 
+slide_sigma = utils.MinMaxSlider(ax_sigma, 'std. dev. of change ($\sigma$)', sigmaMin, sigmaMax, 
     valinit=sigmaInit, valstep=0.1, transform=ax_filter.transAxes)
 
 
 # add table
 statsNames = ['Final elevation', 'Frac. time preserved', 'Mean bed thickness']
-columnNames = ['this run', 'of 100 runs']
+columnNames = ['this run', 'of 500 runs']
 ax_statsTable = plt.axes([0.6, 0.325, 0.5, 0.1], frameon=False, xticks=[], yticks=[])
 tabData = np.tile(['0', '0'], (len(statsNames), 1))
 statsTable = plt.table(cellText=tabData, rowLabels=statsNames,
@@ -181,7 +181,7 @@ for tab_row in np.arange(1, np.size(tabData,0)+1):
 
 # add gui buttons
 chk_conn_ax = plt.axes([0.59, 0.5, 0.175, 0.15], facecolor=background_color)
-chk_conn_list = ['100-run statistics', 'run w/ slider']
+chk_conn_list = ['500-run statistics', 'run w/ slider']
 chk_conn = widget.CheckButtons(chk_conn_ax,
                                chk_conn_list,
                                [False, True])

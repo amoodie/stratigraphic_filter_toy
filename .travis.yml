@@ -22,4 +22,5 @@ before_script:
   - sleep 5 # give xvfb some time to start
 
 script:
-  - pytest --mpl --mpl-results-path=tests/results
+  # - pytest --mpl --mpl-results-path=tests/results
+    - pytest

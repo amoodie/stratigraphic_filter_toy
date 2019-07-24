@@ -11,10 +11,15 @@ def generate_elevation(t, themu, thesigma):
     nt = len(t)
     elev = np.zeros(nt)
     elev[0] = 0
+    dz = np.random.normal(themu, thesigma, nt-1)
+    elev[1:] = np.cumsum(dz)
+    """
+    A parallel method to produce the random walk more clearly:
     for j in np.arange(1,nt):
         jt = t[j]
         jump = np.random.normal(themu, thesigma, 1)
         elev[j] = elev[j-1] + jump
+    """
 
     return elev
 
